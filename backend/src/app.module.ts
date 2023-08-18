@@ -9,11 +9,26 @@ import {ServeStaticModule} from '@nestjs/serve-static'
 import { User, UserSchema } from './model/user.schema';
 import { UserController } from './controllers/user.controller';
 import { UserService } from './service/user.service';
+// setting up multer for  uploading and streaming
+import { diskStorage } from 'multer';
+// uuid for generating random names to file we are uploading
+import { v4 as uuidv4 } from 'uuid';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://127.0.0.1:27017/Stream'),
     MongooseModule.forFeature([{name:User.name,schema:UserSchema}]),
+    MulterModule.register({
+      storage:diskStorage({
+        destination:'./public',
+        // cb used in filename is callback here
+        filename:(req,file,cb)=>{
+          const ext=file.mimetype.split('/')[1];
+          cb(null,`${uuidv4()}-${Date.now()}.${ext}}`)
+        }
+      })
+    }),
     JwtModule.register({
       secret,
       signOptions:{expiresIn:'6h'},
@@ -24,6 +39,6 @@ import { UserService } from './service/user.service';
     }),
   ],
   controllers: [AppController,UserController],
-  providers: [AppService,UserService],
+  providers: [AppService,UserService  ],
 })
 export class AppModule {}
