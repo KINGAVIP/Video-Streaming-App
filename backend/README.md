@@ -71,3 +71,10 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+<!-- Pacakges to be installed -->
+multer-for streaming
+moongose for database
+jwt- for tokenization
+bcrypt-for password hashing
+uui-for unique id generation
