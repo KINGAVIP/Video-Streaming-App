@@ -14,11 +14,15 @@ import { diskStorage } from 'multer';
 // uuid for generating random names to file we are uploading
 import { v4 as uuidv4 } from 'uuid';
 import { MulterModule } from '@nestjs/platform-express';
+import { Video, VideoSchema } from './model/video.schema';
 
+import { VideoController } from './controllers/video.controller';
+import { VideoService } from './service/video.service';
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://127.0.0.1:27017/Stream'),
     MongooseModule.forFeature([{name:User.name,schema:UserSchema}]),
+    MongooseModule.forFeature([{name:Video.name,schema:VideoSchema}]),
     MulterModule.register({
       storage:diskStorage({
         destination:'./public',
@@ -38,7 +42,7 @@ import { MulterModule } from '@nestjs/platform-express';
       rootPath:join(__dirname,'..','public'),
     }),
   ],
-  controllers: [AppController,UserController],
-  providers: [AppService,UserService  ],
+  controllers: [AppController,UserController,VideoController],
+  providers: [AppService,UserService  ,VideoService],
 })
 export class AppModule {}

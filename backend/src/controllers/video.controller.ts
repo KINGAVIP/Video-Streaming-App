@@ -2,7 +2,7 @@ import {Controller,Post,Get,Put,Delete,UseInterceptors,HttpStatus,Param,Body,Res
 import { VideoService } from 'src/service/video.service'
 import { Video } from 'src/model/video.schema'
 import {FileFieldsInterceptor,FileInterceptor} from '@nestjs/platform-express'
-@Controller('api/video')
+@Controller('/api/video')
 export class VideoController{
     constructor(private readonly videoService:VideoService){}
 
