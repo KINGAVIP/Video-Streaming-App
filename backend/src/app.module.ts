@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import {MongooseModule} from '@nestjs/mongoose'
@@ -18,6 +18,7 @@ import { Video, VideoSchema } from './model/video.schema';
 
 import { VideoController } from './controllers/video.controller';
 import { VideoService } from './service/video.service';
+import { isAuthenticated } from './app.middleware';
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://127.0.0.1:27017/Stream'),
@@ -45,4 +46,11 @@ import { VideoService } from './service/video.service';
   controllers: [AppController,UserController,VideoController],
   providers: [AppService,UserService  ,VideoService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer:MiddlewareConsumer)
+  {
+    consumer.apply(isAuthenticated).exclude({
+      path:'api/video/:id',method:RequestMethod.GET
+    }).forRoutes(VideoController)
+  }
+}
